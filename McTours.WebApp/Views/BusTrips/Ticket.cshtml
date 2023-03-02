@@ -36,7 +36,6 @@
                 success:function(response){
                     $('#panel2').html(response);
                     $('#search_passengers_button').click(function(){
-                        console.log('Icardiiiiiiiiiiiiiiiiiiiii');
 
                         $.ajax({
                             url:'@Url.Action("SearchPassengers","Passengers")',
@@ -49,7 +48,7 @@
                             //}
                             data:$('#search_passengers_form').serialize(),
                             dataType:'json',
-                            /* eğer
+                            /* eğer  
                              dataType:'json' yazmasaydık
                              json ifademiz string olacaktı
                              success:function(passengersJson){

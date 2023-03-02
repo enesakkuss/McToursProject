@@ -1,0 +1,155 @@
+﻿@model VehicleDefinitionDto
+
+<h1>Yeni Araç Tanımı</h1>
+<div class="row">
+    <div class="col-12 col-sm-10 col-md-6 col-lg-4">
+        @if (TempData.ContainsKey("ResultMessage"))
+        {
+            <div class="alert alert-danger ">
+                @TempData["ResultMessage"]
+            </div>
+        }
+        <form asp-action="Create" asp-controller="VehicleDefinitions" method="post">
+            <div class="mb-3">
+                <label asp-for="VehicleMakeId"  class="form-label">Marka</label>
+                <select asp-for="VehicleMakeId" asp-items="ViewBag.MakeNames" class="form-select">
+                    <option value="">Lütfen Seçiniz</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label asp-for="VehicleModelId" class="form-label">Araç Modeli</label>
+                <select asp-for="VehicleModelId" class="form-select"></select>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Year" class="form-label">Yılı</label>
+                <input asp-for="Year"  type="text" class="form-control" />
+            </div>
+            @*<div class="mb-3">
+            <label asp-for="FuelType" class="form-label">Yakıt Tipi</label>
+            <select asp-for="FuelType" asp-items="ViewBag.FuelTypes" class="form-select">
+            <option value="">Lütfen Seçiniz</option>
+            </select>
+            </div>*@
+            <label class="form-label">Yakıt Tipi</label>
+            <div class="mb-3">
+                @foreach (ValueNameObject obj in ViewBag.FuelTypes)
+                {
+                    <input type="radio" id="fuel_type_@obj.Value" name="fuelType" value="@obj.Value" class="mb-3" />
+                    <label for="fuel_type_@obj.Value">@obj.Name</label>
+
+                }
+            </div>
+            <div class="mb-3">
+                <label asp-for="SeatingType" class="form-label">Oturma Düzeni</label>
+                <select asp-for="SeatingType" asp-items="ViewBag.SeatingTypes" class="form-select">
+                    <option value="">Lütfen Seçiniz</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Sıra Sayısı</label>
+                <br />
+                <input type="radio" id="line-5" name="lineCount" value="5" />
+                <label for="line-5">5 Sıra</label>
+                <input type="radio" id="line-6" name="lineCount" value="6" />
+                <label for="line-6">6 Sıra</label>
+                <input type="radio" id="line-7" name="lineCount" value="7" />
+                <label for="line-7">7 Sıra</label>
+            </div>
+
+            <div class="mb-3">
+                @foreach (ValueNameObject obj in ViewBag.Utilities)
+                {
+                    <input type="checkbox" id="utility_@obj.Value" name="utilities" value="@obj.Value"/>
+                    <label for="utility_@obj.Value">@obj.Name</label>
+                }
+            </div>
+
+            <div class="mb-3">
+                <div class="float-end">
+                    <button class="btn btn-success" type="submit">
+                        Kaydet
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+@*@section Scripts 
+ {
+    <script>
+
+        $('#vehicleMake').change(function(){
+
+            let vehicleMakeId =this.value;
+            //document.getElementById('VehicleModelId').innerHTML('');
+            $('#VehicleModelId').html('');
+
+            $.ajax({
+                type:'get',
+                url:`/VehicleModels/GetByMakeId?=${vehicleMakeId}`,
+                dataType:'json',
+                succuess:function(vehicleModels){
+                    
+                    if(vehicleModels.length){
+                        let defaultOption = $('<option>').attr('value', '').text('Lütfen Seçiniz');
+                        $('#VehicleModelId').append(defaultOption);
+                    }
+
+                    for(let i=0; i<vehicleModels.length; i++){
+
+                        let optionElement = $('<option>')
+                            .attr('value',vehicleModels[i].id)
+                            .text(vehicleModels[i].name);
+
+                        $('#VehicleModelId').append(optionElement);
+                    }
+                }
+            });
+        });
+    </script>
+ }*@
+@section Scripts
+    {
+    <script>
+
+        //document
+        //    .getElementById('vehicle_make')
+        //    .addEventListener('change', function(){
+
+        //    });
+
+        $('#VehicleMakeId').change(function () {
+
+            let vehicleMakeId = this.value;
+            //document.getElementById('VehicleModelId').innerHTML = '';
+            $('#VehicleModelId').html('');
+
+            $.ajax({
+                type: 'get',
+                url: `/VehicleModels/GetByMakeId?makeId=${vehicleMakeId}`,
+                dataType: 'json',
+                success: function (vehicleModels) {
+
+                    if (vehicleModels.length) {
+                        let defaultOption = $('<option>').attr('value', '').text('Lütfen Seçiniz');
+                        $('#VehicleModelId').append(defaultOption);
+                    }
+
+                    for (let i = 0; i < vehicleModels.length; i++) {
+
+                        //let optionElement = $(`<option value="${vehicleModels[i].id}">${vehicleModels[i].name}</option>`);
+
+                        let optionElement = $('<option>')
+                            .attr('value', vehicleModels[i].id)
+                            .text(vehicleModels[i].name);
+
+                        $('#VehicleModelId').append(optionElement);
+                    }
+                }
+            });
+        });
+
+    </script>
+}

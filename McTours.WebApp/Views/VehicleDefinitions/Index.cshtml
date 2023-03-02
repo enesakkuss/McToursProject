@@ -1,0 +1,78 @@
+﻿@model IEnumerable<VehicleDefinitionSummary>
+
+<h1>Tüm Modellerin Araç Tanımları</h1>
+<div class="row">
+    <div class="col-12">
+        <div class="float-end">
+            <a class="btn btn-outline-primary btn-sm" asp-controller="VehicleDefinitions" asp-action="Create">Yeni Tanım Ekle</a>
+        </div>
+        <div class="float-start col-4">
+        @if (TempData.ContainsKey("ResultMessage"))
+        {
+            <div class="alert alert-success">
+                @TempData["ResultMessage"]
+            </div>
+        }
+        </div>
+        <table class="table table-striped" >
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Marka</th>
+                    <th>Model</th>
+                    <th>Yılı</th>
+                    <th>Oturma Düzeni</th>
+                    <th>Sıra Sayısı</th>
+                    <th>Koltuk Sayısı</th>
+                    <th>Yakıt Tipi</th>
+                    <th>Özellikler</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var vehicle in Model)
+                {
+                    <div>
+
+                    <tr>
+                        <td>@vehicle.Id</td>
+                        <td>@vehicle.MakeName</td>
+                        <td>@vehicle.ModelName</td>
+                        <td>@vehicle.Year</td>
+                        <td>@vehicle.SeatingTypeNames</td>
+                        <td>@vehicle.LineCount</td>
+                        <td>@vehicle.SeatCount</td>
+                        <td>@vehicle.FuelTypeName</td>
+                        <td>@vehicle.UtilitiesName</td>
+
+                        <td class="text-end">
+                            <a class="btn btn-outline-primary btn-sm" asp-controller="VehicleDefinitions" asp-action="Update" asp-route-id="@vehicle.Id">Düzenle </a>
+                            <form asp-action="Delete" method="post" class="delete-form d-inline-block">
+                                <input type="hidden" value="@vehicle.Id" name="id">
+                                <button class="btn btn-outline-danger btn-sm">Sil</button>
+                            </form>
+                        </td>
+                    </tr>
+                    </div>
+                }
+            </tbody>
+    </table>
+</div>
+</div>
+
+
+@section Scripts{
+    <script>
+        let deleteForms = document.getElementsByClassName('delete-form');
+
+        for (let i = 0; i < deleteForms.length; i++) {
+            deleteForms[i].addEventListener('submit', function (e) {
+
+                let isConfirmed = confirm('Dikkat Bu kayıt silinecek. Devam etmek istiyor musunuz?');
+                if (!isConfirmed) {
+                    e.preventDefault();
+                }
+            });
+        }
+    </script>
+}

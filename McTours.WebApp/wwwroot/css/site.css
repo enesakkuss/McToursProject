@@ -1,0 +1,60 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.table tbody tr:hover{
+    background-color:paleturquoise;
+    color:#FFFFFF;
+        
+}
+
+.form-label{
+    font-size:larger;
+}
+
+.bus-seat.empty {
+    border: solid;
+    width: 35px;
+    height: 35px;
+    background-color: lightgreen;
+}
+
+@media(min-width:768px){
+    /*Manuel responsive css yazma*/
+    .bus-seat.empty {
+        border: solid;
+        width: 50px;
+        height: 50px;
+        background-color: lightgreen;
+    }
+}
+
+
+.bus-seat.sold {
+    background-color: darkred;
+    border: solid;
+    width: 50px;
+    height: 50px;
+}
+
+
+
+.bus-seat.selected{
+    background-color:darkcyan;
+}
+

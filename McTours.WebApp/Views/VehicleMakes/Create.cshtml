@@ -1,0 +1,45 @@
+﻿<h1> Yeni Marka</h1>
+<div class="row">
+    <div class="col-12 col-sm-10 col-md-6 col-lg-4">
+       @* @if (TempData.ContainsKey("ResultMessage"))
+        {
+            <div class="alert alert-danger"> 
+                @TempData["ResultMessage"]
+            </div>
+        }*@
+        @if (ViewData.ContainsKey("ResultMessage"))
+        {
+            <div class="alert alert-danger">
+                @ViewData["ResultMessage"]
+            </div>
+        }
+
+        @*@if (ViewBag.ResultMessage != null)
+        {
+            <div class="alert alert-danger">
+                @ViewBag["ResultMessage"]
+            </div>
+        }*@
+
+        <!-- /VehicleMakes/Create-->
+        <!-- 
+            Form elementine action bildirmezseniz, action (yani URL değeri) otomatik olarak
+            mevcut sayfanın URL'i olarak kabul edilir
+            Ancak yine de action değerini her zaman yamakta fayda var
+        <form asp-controller="VehicleMakes" asp-action="Creat" method="post">
+        -->
+        <form method="post">
+            <div class="mb-3">
+                <label for="name" class="form-label">Marka Adı</label>
+                <input type="text" id="name" name="name" class="form-control"/>
+            </div>
+            <div class="mb-3">
+                <div class="float-end">
+                    <button class="btn btn-success" type="submit">
+                        Kaydet
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

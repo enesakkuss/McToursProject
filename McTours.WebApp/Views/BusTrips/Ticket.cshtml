@@ -1,0 +1,139 @@
+﻿@model BusTripDetails
+<h1>
+    @Model.Route
+    <br />
+    <small>
+        @Model.VehicleName
+    </small>
+</h1>
+<div class="row">
+    <div id="panel1" class="col-7 col-sm-6 col-md-5 col-lg-4 col-xl-3">
+
+            @await Component.InvokeAsync("BusTripSeats", new { id = Model.Id })
+    </div>
+    <div id="panel2" class="col-5 col-sm-6 col-md-7 col-lg-8 col-xl-9">
+
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        
+        $('.bus-seat.empty').click(function () { 
+
+            
+            $('.bus-seat.selected').removeClass('selected');
+
+            $(this).addClass('selected');
+
+            let seatNumber = parseInt(this.dataset.seatNumber)
+                                        // data-seat-number dan veri çekmek için dataset // .seatNumber == seat-number kebab-case değilde camelCase yazıyoruz
+
+            $.ajax({
+                //url:'/Passengers/SearhPassengers'
+                url: '@Url.Action(controller:"Passengers",action:"SearchPassengers")',
+                type:'get',
+                success:function(response){
+                    $('#panel2').html(response);
+                    $('#search_passengers_button').click(function(){
+                        console.log('Icardiiiiiiiiiiiiiiiiiiiii');
+
+                        $.ajax({
+                            url:'@Url.Action("SearchPassengers","Passengers")',
+                            type:'post',
+                            //data:{
+                            //    // JavaScriptte nesnenin property isimlerini string olarakta tanımlayabilirsiniz
+                            //    'identityNumber': $('#IdentityNumber').val(), // inputtan gelen değer
+                            //    firstName: $('#FirstName').val(),
+                            //    lastName: $('#LastName').val()
+                            //}
+                            data:$('#search_passengers_form').serialize(),
+                            dataType:'json',
+                            /* eğer
+                             dataType:'json' yazmasaydık
+                             json ifademiz string olacaktı
+                             success:function(passengersJson){
+                             
+                             let passenger = JSON.parse(passengersJson) -> stringi JSON'ın Js nesnesine dönüştürür  // JSON.stringify(passengersJson) -> tam tersi
+                             şeklinde çevirmemiz gerekicek
+                             }
+                            */
+
+                            success:function(passengers){
+                                $('#search_passengers_result_table > tbody').html(null);
+                                $('#create_passenger_button').remove();
+                                if(passengers.length)
+                                {
+                                    for (let i = 0; i < passengers.length; i++) {
+
+                                        let passenger = passengers[i];
+
+                                        let tableRow = $('<tr>');
+                                        let identityNumberCell = $('<td>').text(passenger.identityNumber);
+                                        let firstNameCell = $('<td>').text(passenger.firstName);
+                                        let lastNameCell = $('<td>').text(passenger.lastName);
+                                        let genderCell = $('<td>').text(passenger.genderName);
+
+                                        tableRow
+                                            .append(identityNumberCell)
+                                            .append(firstNameCell)
+                                            .append(lastNameCell)
+                                            .append(genderCell);
+
+
+                                        tableRow.click(function () {
+                                            let ajaxData = {
+                                                busTripId: @Model.Id,
+                                                passengerId: passenger.id,
+                                                seatNumber: seatNumber
+                                            };
+
+                                            $.ajax({
+                                                url: '@Url.Action("BusTripTicketReview","Tickets")',
+                                                type: 'post',
+                                                data: ajaxData,
+                                                success: function (ticketReviewPage) {
+                                                    $('#panel2').html(ticketReviewPage);
+                                                }
+                                            });
+                                        });
+
+                                        $('#search_passengers_result_table tbody').append(tableRow);
+                                        }
+                                }
+                                else
+                                {
+                                    let tableRow = $('<tr>');
+                                    let emptyCell = $('<td colspan="4">').text('Kayıt bulunamadı');
+
+                                    tableRow.append(emptyCell)
+                                    $('#search_passengers_result_table > tbody').append(tableRow);
+
+                                    let newPassengerButton = $('<button>')
+                                    .attr('id','create_passenger_button')
+                                    .text('Yeni Ekle')
+                                    .addClass('btn btn-outline-primary');
+
+                                    $('#search_passengers_result_table').after(newPassengerButton);
+
+                                    
+                                    
+                                }
+                            }
+                        });
+                    });
+                },
+                error : function(error){
+                    console.log(error)
+                }
+            });
+        });
+
+        $('.bus-seat.empty').click(function(){
+            
+            // ajax ile tickets controllerdan getticketInfo gibi bir metodu çağır
+            // Parametreler BusTripId, SeatNumber
+        })
+        
+    </script>
+}

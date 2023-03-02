@@ -1,0 +1,63 @@
+﻿@model BusTripSeatsModel
+
+@functions{
+    public HtmlString GetBusSeatClass(IEnumerable<int> soldSeatNumber, int seatNumber)
+    {
+        if(soldSeatNumber.Contains(seatNumber))
+        {
+            return new HtmlString("btn bus-seat sold");
+        }
+        else
+        {
+            return new HtmlString("btn bus-seat empty");
+        }
+    }
+}
+
+<div id="bus_seatings" class="col">
+
+    @for (var i = 0; i < Model.SeatCount; i++)
+    {
+        var seatNumber = i + 1;
+        if (Model.SeatingType == SeatingType.Vip)
+        {
+            if (i % 3 == 0)
+            {
+                <br />
+            }
+        }
+        else
+        {
+            if (i % 4 == 0)
+            {
+                <br />
+            }
+        }
+
+        if (Model.SeatingType == SeatingType.Vip)
+        {
+            if ((i + 1) % 3 != 0)
+            {
+                
+
+                <button class="@GetBusSeatClass(Model.SoldSeatNumbers, seatNumber) mb-2" data-seat-number="@(seatNumber)">@(i + 1)</button>
+                                                                                // data (data-seat-number)attributesi ile bir çok parametreyi arka planda saklayaniliriz
+            }                                                                                           // data attr adı -seat-number bizim verdiğimiz ad
+            else
+            {
+                <button class="@GetBusSeatClass(Model.SoldSeatNumbers, seatNumber) mb-2 ms-4 " data-seat-number="@(seatNumber)">@(i + 1)</button>
+            }
+        }
+        else
+        {
+            if (i % 2 == 1)
+            {
+                <button class="@GetBusSeatClass(Model.SoldSeatNumbers, seatNumber)  mb-2 me-2 " data-seat-number="@(seatNumber)">@(i + 1)</button>
+            }
+            else
+            {
+                <button class="@GetBusSeatClass(Model.SoldSeatNumbers, seatNumber) mb-2" data-seat-number="@(seatNumber)">@(i + 1)</button>
+            }
+        }
+    }
+</div>

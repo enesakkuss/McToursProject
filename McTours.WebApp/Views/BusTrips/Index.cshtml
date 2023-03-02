@@ -1,0 +1,76 @@
+﻿@model IEnumerable<BusTripSummary>
+
+<h1>
+	Seferler
+</h1>
+
+<div class="row">
+	<div class=" col-12 col-sm-10 col-md-10">
+
+		@if (TempData.ContainsKey("ResultMessage"))
+        {
+            <div class="alert alert-success ">
+                @TempData["ResultMessage"]
+            </div>
+        }
+
+		<div class="float-end">
+			<a class="btn btn-outline-primary btn-sm" asp-controller="BusTrips" asp-action="Create">
+				Yeni Ekle
+			</a>
+		</div>
+		<table class="table table-striped ">
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>Araç</th>
+					<th>Tarih</th>
+					<th>Rota</th>
+					<th>Tahmini Süre</th>
+					<th>Bilet Fiyatı</th>
+				</tr>
+			</thead>
+			<tbody>
+
+				@foreach (BusTripSummary item in Model)
+				{
+					<tr>
+						<td>@item.Id</td>
+						<td>@item.VehicleName.ToUpper()</td>
+						<td>@item.Date.ToString("dd-MM-yyyy HH:mm")</td>
+						<td>@item.DepartureCityName -> @item.ArrivalCityName</td>
+						<td>@item.EstimatedDuration Dakika</td>
+						<td>@item.TicketPrice.ToString("N2")</td>
+						<td class="text-end">
+							<a class="btn btn-outline-primary btn-sm" asp-controller="BusTrips" asp-action="Ticket" asp-route-id="@item.Id" style="background-color:lightgreen ">Bilet Kes</a>
+							<a class="btn btn-outline-primary btn-sm" asp-controller="BusTrips" asp-action="Update" asp-route-id="@item.Id">Düzenle</a>
+							<form  asp-action="Delete" method="post" class="delete-form d-inline-block">
+								<input type="hidden" value="@item.Id" name="Id">
+								<button class="btn btn-outline-danger btn-sm">Sil</button>
+							</form>
+						</td>
+					</tr>
+				}
+
+			</tbody>
+		</table>
+	</div>
+
+
+</div>
+
+@section Scripts{
+	<script>
+		let deleteForms = document.getElementsByClassName('delete-form');
+
+		for (let i = 0; i < deleteForms.length; i++) {
+			deleteForms[i].addEventListener('submit', function (e) {
+
+				let isConfirmed = confirm('Dikkat Bu kayıt silinecek. Devam etmek istiyor musunuz?');
+				if (!isConfirmed) {
+					e.preventDefault();
+				}
+			});
+		}
+	</script>
+}

@@ -1,0 +1,37 @@
+﻿@model VehicleMakeDto?
+
+<h1> Marka Silme</h1>
+<div class="row">
+    <div class="col-12 col-sm-10 col-md-6 col-lg-4">
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="alert alert-danger">
+                @ViewBag.ErrorMessage
+            </div>
+        }
+
+        <p class="alert alert-warning "> Dikkat Bu Kayıt Silinecek
+            <br/>Devam Etmek İstiyor Musunuz????
+        </p>
+        <form asp-controller="VehicleMakes" asp-action="Delete" method="post">
+
+            <div class="mb-3">
+                <label for="id" class="form-label">Marka Id</label>
+                <input type="text" id="id" name="id" class="form-control" value="@Model.Id" readonly />
+            </div>
+            <div class="mb-3">
+
+                <label for="name" class="form-label">Marka Adı</label>
+                <input type="text" id="name" name="name" class="form-control" value="@Model.Name" readonly/>
+            </div>
+            <div class="mb-3">
+                <div class="float-end">
+                    <a class="btn btn-outline-warning" asp-action="Index">İptal</a>
+                    <button class="btn btn-success" type="submit">
+                        Sil
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

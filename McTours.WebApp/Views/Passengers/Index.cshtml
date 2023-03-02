@@ -1,0 +1,68 @@
+﻿@model IEnumerable<PassengerDto>
+
+<h1>Tüm Yolcular</h1>
+<div class="row">
+    <div class="col-12">
+        <div class="float-end">
+            <a class="btn btn-outline-primary btn-sm" asp-controller="Passengers" asp-action="Create">Yeni Yolcu Ekle</a>
+        </div>
+        <div class="float-start col-4">
+            @if (TempData.ContainsKey("ResultMessage"))
+            {
+                <div class="alert alert-success">
+                    @TempData["ResultMessage"]
+                </div>
+            }
+        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>İsim</th>
+                    <th>Soyisim</th>
+                    <th>TC Kimlik No</th>
+                    <th>Cinsiyet</th>
+                    <th>Doğum Tarihi</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var passenger in Model)
+                {
+                    <div>
+
+                    <tr>
+                        <td>@passenger.Id</td>
+                        <td>@passenger.FirstName</td>
+                        <td>@passenger.LastName</td>
+                        <td>@passenger.IdentityNumber</td>
+                        <td>@passenger.GenderName</td>
+                        <td>@passenger.DateOfBirth</td>
+                        <td class="text-end">
+                            <a class="btn btn-outline-primary btn-sm" asp-controller="Passengers" asp-action="Update" asp-route-id="@passenger.Id">Düzenle </a>
+                            <form asp-action="Delete" method="post" class="delete-form d-inline-block">
+                                <input type="hidden" value="@passenger.Id" name="id">
+                                <button class="btn btn-outline-danger btn-sm">Sil</button>
+                            </form>
+                        </td>
+                    </tr>
+        </div>
+                }
+    </tbody>
+    </table>
+</div>
+  </div>
+
+@section Scripts{
+    <script>
+        let deleteForms = document.getElementsByClassName('delete-form');
+        for (let i = 0; i < deleteForms.length; i++) {
+            deleteForms[i].addEventListener('submit', function (e) {
+                let isConfirmed = confirm('Dikkat Bu kayıt silinecek. Devam etmek istiyor musunuz?');
+                if (!isConfirmed) {
+                    e.preventDefault();
+                }
+            });
+        }
+    </script>
+  }

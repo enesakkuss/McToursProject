@@ -1,0 +1,108 @@
+﻿@model VehicleDto
+<h1>
+    Araç Güncelleme
+</h1>
+
+<div class="row">
+
+    <div class="col-12 col-sm-10 col-md-7 col-lg-5">
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+        <form asp-controller="Vehicle" asp-action="Update" method="post">
+
+            <div class="mb-3">
+                <label class="form-label">Tanımlamalar</label>
+                <select class="form-select" asp-for="VehicleDefinitionId">
+                    @foreach (VehicleDefinitionWithName item in ViewBag.VehicleDefinitionWithName)
+                    {
+
+                        if (Model.VehicleDefinitionId == item.VehicleDefinitionId)
+                        {
+                            <option id="@item.VehicleDefinitionId" value="@item.VehicleDefinitionId" selected>@item.Description</option>
+                        }
+                        else
+                        {
+                            <option id="@item.VehicleDefinitionId" value="@item.VehicleDefinitionId">@item.Description</option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="PlateNumber" class="form-label">Araç Plaka</label>
+                <input asp-for="PlateNumber" type="text" class="form-control  />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="RegistrationNumber" class="form-label">Ruhsat Numarası</label>
+                <input asp-for="RegistrationNumber" type="text" class="form-control   />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="RegistrationDate" class="form-label">Tırafiğe Çıkış Tarihi</label>
+                <input asp-for="RegistrationDate" type="date" class="form-control   />
+            </div>
+
+
+            <div class="mb-3">
+                <div class="float-end">
+                    <a class="btn btn-outline-warning" asp-action="Index">
+                        İptal
+                    </a>
+                    <button class="btn btn-success" type="submit">
+                        Kaydet
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts
+    {
+    <script>
+
+        $('#VehicleMakeId').change(function () {
+
+            let vehicleMakeId = this.value;
+            $('#VehicleModelId').html('');
+
+            $.ajax({
+                type: 'get',
+                url: `/VehicleModels/GetByMakeId?makeId=${vehicleMakeId}`,
+                dataType: 'json',
+                success: function (vehicleModels) {
+
+                    if (vehicleModels.length) {
+                        let defaultOption = $('<option>').attr('value', '').text('Lütfen Seçiniz');
+                        $('#VehicleModelId').append(defaultOption);
+                    }
+
+                    for (let i = 0; i < vehicleModels.length; i++) {
+
+                        let optionElement = $('<option>')
+                            .attr('value', vehicleModels[i].id)
+                            .text(vehicleModels[i].name);
+
+                        $('#VehicleModelId').append(optionElement);
+                    }
+                }
+            });
+        });
+
+    </script>
+}
+
+
+

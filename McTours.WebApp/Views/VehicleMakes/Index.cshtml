@@ -1,0 +1,50 @@
+﻿@model IEnumerable<VehicleMakeDto>
+
+<h1>Tüm Markalar</h1>
+<div class="row">
+    <div class="col-12 col-sm-10 col-md-8">
+        <div class="float-end">
+            <a class="btn btn-outline-primary btn-sm" asp-controller="VehicleMakes" asp-action="Create">Yeni Ekle</a>
+        </div>
+        @if(TempData.ContainsKey("ResultMessage"))
+        {
+            <div class="alert alert-success">
+                @TempData["ResultMessage"]
+            </div>
+        }
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Marka Adı</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var vehicleMake in Model)
+                {
+                    <div >
+
+                    <tr>
+                        <td>@vehicleMake.Id</td>
+                        <td>@vehicleMake.Name</td>
+                        <td class="text-end">
+                            <a class="btn btn-outline-primary btn-sm" 
+                             asp-controller="VehicleMakes"
+                             asp-action="Update"
+                             asp-route-id="@vehicleMake.Id">Düzenle
+                         </a>
+                            <button class="btn btn-outline-danger btn-sm"
+                           asp-controller="VehicleMakes"
+                           asp-action="Delete"
+                           asp-route-id="@vehicleMake.Id">
+                                Sil
+                            </button>
+                        </td>
+                    </tr>
+                    </div>
+                }
+            </tbody>
+        </table>
+    </div> 
+</div>

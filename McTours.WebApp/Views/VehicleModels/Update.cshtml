@@ -1,0 +1,39 @@
+﻿@model VehicleModelDto
+
+<h1>Modeli Güncelle</h1>
+<div class="row">
+    <div class="col-12 col-sm-10 col-md-6 col-lg-4">
+        @if (TempData.ContainsKey("ResultMessage"))
+        {
+            <div class="alert alert-danger">
+                @TempData["ResultMessage"]
+            </div>
+        }
+        <form asp-controller="VehicleModels" asp-action="Update" method="post">
+            <div class="mb-3">
+                <label asp-for="Id" class="form-label">Marka Id</label>
+                <input asp-for="Id" type="text" class="form-control" readonly />
+            </div>
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label">Model Adı</label>
+                <input asp-for="Name" type="text" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label asp-for="VehicleMakeId" class="form-label">Marka Adı</label>
+                <select asp-for="VehicleMakeId" asp-items="ViewBag.VehicleMakes" class="form-select">
+                    <option value="">Lütfen Seçiniz</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <div class="float-end">
+                    <a class="btn btn-outline-warning" asp-action="Index">İptal</a>
+                    <button class="btn btn-success" type="submit">
+                        Güncelle
+                    </button>
+                    
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>

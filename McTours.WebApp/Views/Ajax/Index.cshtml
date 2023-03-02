@@ -1,0 +1,115 @@
+﻿<h1> AJAX Örnekleri </h1>
+
+<div class="row">
+    <h2>Ajax ile Dümdüz Text Cevap Alma</h2>
+    <div class="col-6">
+        <button id="btn01"> Oyunun adını getir</button>
+    </div>
+    <div class="col-6">
+        <p id="prg01"></p>
+    </div>
+</div>
+<div class="row">
+    <h2>Ajax ile Json Cevap Alma</h2>
+    <div class="col-6">
+        <button id="btn02"> Oyuncuları getir</button>
+    </div>
+    <div class="col-6">
+        <table id="players_table">
+            <thead>
+                <tr>
+                    <th>Adı</th>
+                    <th>Soyadı</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts
+    {
+    <script>
+        //let xmlHttpRequest = new XMLHttpRequest();
+        //xmlHttpRequest.open('url');
+        //xmlHttpRequest.send();
+
+        //var button1 = document.getElementById('btn01');
+        //button1.addEventListener('click' function() {});
+
+
+        //let btn01 = jQuery('#btn01');
+        let btn01 = $('#btn01'); //$ -> jQuery
+        //button1.addEventListener('click' function() {});
+
+        //$('#btn01').click (function() {
+        //});
+
+        //jQuery, DOM bazlı JavaScript kodlamasını basitleştirmek için geliştirilmiş bir JavaScript kütüphanesidir.
+
+        //jQuery ile event handling
+
+        btn01.click(function () {
+            //window.location ='/Ajax/GetPlayerName';
+
+            //literal object initialization
+            let ajaxParams = {
+                url: '/Ajax/GetPlayerName',
+                type: 'get',
+                success: function (response) {
+                    $('#prg01').text(response);
+                }
+            };
+
+            $.ajax(ajaxParams);
+            // Asynchronous prgramlama sıralı akmaz!!
+            //paragrafın metni debugger'a düşmüşte olabilir düşmemişte yani sunucudan cevap gelebilir de gelmeyebilird de
+
+            //document.body.innerHTML='';
+            //$(document.body).html('');
+            //$(document.body).html('<p></p>')
+            let paragraphText = $('#prg01').text();
+            console.log('Paragrafın metni: ', paragraphText);
+
+
+
+        });
+
+    </script>
+
+    <script>
+        $('#btn02').click(function () {
+
+            //axios - kütüphane
+            $.ajax({
+                url: '/Ajax/GetPlayerNames',
+                dataType: 'json', //Cevabın tipi
+                success: function (players) {
+                    for (let i = 0; i < players.length; i++) {
+
+                        //let tableRow = document.createElement('tr');
+                        //let tdFistName = document.createElement('td');
+                        //tdFistName.textContent = players[i].firtName;
+
+                        //tr.appendChild(trFirstName);
+
+                        let tr = $('<tr>');
+                        let tdFirstName = $('<td>')
+                        tdFirstName.text(players[i].firstName);
+
+
+                        let tdLastName = $(`<td>${players[i].lastName}</td>`);
+                        tr.append(tdFirstName).append(tdLastName)
+                        console.log(tdLastName)
+
+                        $('#players_table > tbody').append(tr);
+                    }
+
+                    $('#players_table').addClass('table table-striped');
+                }
+
+
+            });
+        });
+    </script>
+}

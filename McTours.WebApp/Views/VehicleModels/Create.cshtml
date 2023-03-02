@@ -1,0 +1,38 @@
+﻿@model VehicleMakeDto
+<h1>Yeni Model</h1>
+<div class="row"> 
+    <div class="col-12 col-sm-10 col-md-6 col-lg-4">
+        @if (ViewData.ContainsKey("ResultMessage"))
+        {
+            <div class="alert alert-danger">
+                @ViewData["ResultMessage"]
+            </div>
+        }
+        <form asp-action="Create" asp-controller="VehicleModels" method="post">
+            <div class="mb-3">
+                <label for="name" class="form-label">Model Adı</label>
+                <input type="text" id="name" name="name" class="form-control" value="@Model?.Name"/>
+            </div>
+            <div class="mb-3">
+                <label for="vehicle_make_id" class="form-label">Marka Adı</label>
+                <select class="form-select" id="vehicle_make_id" name="vehicleMakeId">
+                    @foreach (VehicleMakeDto vehicleMake in ViewBag.VehicleMakes)
+                    {
+                        <option value="@vehicleMake.Id">@vehicleMake.Name</option>
+                    }
+                </select>
+                
+                @*@Html.DropDownList("allMakes",new SelectList(ViewBag.allMakes,"Value","Text"),"Marka Seçiniz",new {@class="form-select"})*@
+                
+            </div>
+            <div class="mb-3">
+                <div class="float-end">
+                    <button class="btn btn-success" type="submit">
+                        Kaydet
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
